@@ -220,6 +220,16 @@ module.exports = {
     enable: function (success, failure) {
         cordova.exec(success, failure, "BLE", "enable", []);
     },
+    
+    // Android only
+    autoEnable: function (success, failure) {
+        cordova.exec(success, failure, "BLE", "autoEnable", []);
+    },
+
+    // Android only
+    autoDisable: function (success, failure) {
+        cordova.exec(success, failure, "BLE", "autoDisable", []);
+    },
 
     showBluetoothSettings: function (success, failure) {
         cordova.exec(success, failure, "BLE", "showBluetoothSettings", []);
