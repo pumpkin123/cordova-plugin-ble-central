@@ -77,6 +77,9 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
 
     private static final String SETTINGS = "showBluetoothSettings";
     private static final String ENABLE = "enable";
+   
+    private static final String AUTO_ENABLE = "autoEnable";  // auto enable
+    private static final String AUTO_DISABLE = "autoDisable"; // auto disable
 
     private static final String START_STATE_NOTIFICATIONS = "startStateNotifications";
     private static final String STOP_STATE_NOTIFICATIONS = "stopStateNotifications";
@@ -279,6 +282,36 @@ public class BLECentralPlugin extends CordovaPlugin implements BluetoothAdapter.
             enableBluetoothCallback = callbackContext;
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             cordova.startActivityForResult(this, intent, REQUEST_ENABLE_BLUETOOTH);
+
+        } else if (action.equals(AUTO_ENABLE)) {
+
+            String androidVersion = android.os.Build.VERSION.RELEASE + "";
+            Integer verison = Integer.parseInt(String.valueOf(androidVersion.charAt(0)));
+            if (verison >= 8) {
+                callbackContext.success();
+            } else {
+                if (!bluetoothAdapter.isEnabled()) {
+                    bluetoothAdapter.enable();
+                    callbackContext.success();
+                } else {
+                    callbackContext.error("Already enable");
+                }
+            }
+
+        } else if (action.equals(AUTO_DISABLE)) {
+
+            String androidVersion = android.os.Build.VERSION.RELEASE + "";
+            Integer verison = Integer.parseInt(String.valueOf(androidVersion.charAt(0)));
+            if (verison >= 8) {
+                callbackContext.success(verison);
+            } else {
+                if (bluetoothAdapter.isEnabled()) {
+                    bluetoothAdapter.disable();
+                    callbackContext.success(verison);
+                } else {
+                    callbackContext.error("Already disbale");
+                }
+            }
 
         } else if (action.equals(START_STATE_NOTIFICATIONS)) {
 
